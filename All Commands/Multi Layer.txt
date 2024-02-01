@@ -1,0 +1,285 @@
+=========================================================================
+			Multilayer Switch - 1
+=========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname Mlt-SW1
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+SSH Configuration
+-----------------
+ip domain name cisco.net
+username admin password cisco
+crypto key generate rsa
+1024
+line vty 0 15
+login local
+transport input ssh
+exit
+
+ip ssh version 2
+
+do wr
+
+
+gig1/0/3 to gig1/0/8 is trunk port and connect to VLAN
+------------------------------------------------------
+int range gig1/0/3-8
+switchport mode trunk
+
+vlan 10
+name Sales
+vlan 20
+name HR
+vlan 30
+name Finance
+vlan 40
+name Admin
+vlan 50
+name ICT
+vlan 60
+name ServerRoom
+
+exit
+
+do wr
+
+
+Making gig1/0/1-2 into a layer 3 interface
+------------------------------------------
+int range gig1/0/1-2
+no switchport
+
+exit
+do wr
+
+
+Assigning IP address
+--------------------
+int gig1/0/1
+ip address 10.10.10.2 255.255.255.252
+no shutdown
+exit
+do wr
+
+int gig1/0/2
+ip address 10.10.10.10 255.255.255.252
+no shutdown
+exit
+do wr
+
+OSPF Configuration (ospf 10 is process ID)
+------------------------------------------
+ip routing
+router ospf 10
+router-id 2.2.2.2
+network 192.168.10.0 0.0.0.255 area 0
+network 192.168.20.0 0.0.0.255 area 0
+network 192.168.30.0 0.0.0.255 area 0
+network 192.168.40.0 0.0.0.255 area 0
+network 192.168.50.0 0.0.0.255 area 0
+network 192.168.60.0 0.0.0.255 area 0
+network 10.10.10.0 0.0.0.3 area 0
+network 10.10.10.8 0.0.0.3 area 0
+
+do wr
+
+Inter-VLAN configuration
+------------------------
+int vlan 10
+no shutdown
+ip address 192.168.10.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 20
+no shutdown
+ip address 192.168.20.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 30
+no shutdown
+ip address 192.168.30.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 40
+no shutdown
+ip address 192.168.40.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 50
+no shutdown
+ip address 192.168.50.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 60
+no shutdown
+ip address 192.168.60.1 255.255.255.0
+exit
+
+do wr
+
+
+Defult static route
+-------------------
+ip route 0.0.0.0 0.0.0.0 gig1/0/1
+ip route 0.0.0.0 0.0.0.0 gig1/0/2 70
+
+=========================================================================
+			Multilayer Switch - 2
+=========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname Mlt-SW2
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+SSH Configuration
+-----------------
+ip domain name cisco.net
+username admin password cisco
+crypto key generate rsa
+1024
+line vty 0 15
+login local
+transport input ssh
+exit
+
+ip ssh version 2
+
+do wr
+
+gig1/0/3 to gig1/0/8 is trunk port and connect to VLAN
+------------------------------------------------------
+int range gig1/0/3-8
+switchport mode trunk
+
+vlan 10
+name Sales
+vlan 20
+name HR
+vlan 30
+name Finance
+vlan 40
+name Admin
+vlan 50
+name ICT
+vlan 60
+name ServerRoom
+
+exit
+
+do wr
+
+
+Making gig1/0/1-2 into a layer 3 interface
+------------------------------------------
+int range gig1/0/1-2
+no switchport
+
+exit
+do wr
+
+Assigning IP address
+--------------------
+int gig1/0/1
+ip address 10.10.10.6 255.255.255.252
+no shutdown
+exit
+do wr
+
+int gig1/0/2
+ip address 10.10.10.14 255.255.255.252
+no shutdown
+exit
+do wr
+
+OSPF Configuration
+------------------
+ip routing
+router ospf 10
+router-id 1.1.1.1
+network 192.168.10.0 0.0.0.255 area 0
+network 192.168.20.0 0.0.0.255 area 0
+network 192.168.30.0 0.0.0.255 area 0
+network 192.168.40.0 0.0.0.255 area 0
+network 192.168.50.0 0.0.0.255 area 0
+network 192.168.60.0 0.0.0.255 area 0
+network 10.10.10.4 0.0.0.3 area 0
+network 10.10.10.12 0.0.0.3 area 0
+
+do wr
+
+Inter-VLAN configuration
+------------------------
+int vlan 10
+no shutdown
+ip address 192.168.10.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 20
+no shutdown
+ip address 192.168.20.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 30
+no shutdown
+ip address 192.168.30.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 40
+no shutdown
+ip address 192.168.40.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 50
+no shutdown
+ip address 192.168.50.1 255.255.255.0
+ip helper-address 192.168.60.2
+exit
+
+int vlan 60
+no shutdown
+ip address 192.168.60.1 255.255.255.0
+exit
+
+do wr
+
+Defult static route
+-------------------
+ip route 0.0.0.0 0.0.0.0 gig1/0/1
+ip route 0.0.0.0 0.0.0.0 gig1/0/2 70
+

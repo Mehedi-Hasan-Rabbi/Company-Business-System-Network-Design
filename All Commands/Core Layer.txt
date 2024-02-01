@@ -1,0 +1,216 @@
+=========================================================================
+				Core Router - 1
+=========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname CORE-R1
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+SSH Configuration
+-----------------
+ip domain name cisco.net
+username admin password cisco
+crypto key generate rsa
+1024
+line vty 0 15
+login local
+transport input ssh
+exit
+
+ip ssh version 2
+
+do wr
+
+
+Assigning IP address
+--------------------
+int gig0/0
+ip address 10.10.10.1 255.255.255.252
+no shutdown
+exit
+do wr
+
+int gig0/1
+ip address 10.10.10.5 255.255.255.252
+no shutdown
+exit
+do wr
+
+int se0/2/0
+ip address 103.133.254.1 255.255.255.252
+no shutdown
+clock rate 64000
+exit
+do wr
+
+int se0/2/1
+ip address 103.133.254.10 255.255.255.252
+no shutdown
+clock rate 64000
+exit
+do wr
+
+OSPF Configuration ( OSPF 10 is the process ID )
+---------------------------------
+router ospf 10
+router-id 3.3.3.3
+network 10.10.10.0 0.0.0.3 area 0
+network 10.10.10.4 0.0.0.3 area 0
+network 103.133.254.0 0.0.0.3 area 0
+network 103.133.254.8 0.0.0.3 area 0
+
+do wr
+exit
+
+PAT Configuration
+-----------------
+ip nat inside source list 1 int se0/2/0 overload
+ip nat inside source list 1 int se0/2/1 overload
+
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+access-list 1 permit 192.168.30.0 0.0.0.255
+access-list 1 permit 192.168.40.0 0.0.0.255
+access-list 1 permit 192.168.50.0 0.0.0.255
+access-list 1 permit 192.168.60.0 0.0.0.255
+
+int range gig0/0-1
+ip nat inside
+exit
+
+int se0/2/0
+ip nat outside
+int se0/2/1
+ip nat outside
+exit
+
+do wr
+
+Defult static route
+-------------------
+ip route 0.0.0.0 0.0.0.0 se0/2/0   // If problem use: ip route 0.0.0.0 0.0.0.0 se0/2/0 70
+ip route 0.0.0.0 0.0.0.0 se0/2/1 70
+
+do wr
+
+=========================================================================
+				Core Router - 2
+=========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname CORE-R2
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+SSH Configuration
+-----------------
+ip domain name cisco.net
+username admin password cisco
+crypto key generate rsa
+1024
+line vty 0 15
+login local
+transport input ssh
+exit
+
+ip ssh version 2
+
+do wr
+
+Assigning IP address
+--------------------
+int gig0/0
+ip address 10.10.10.9 255.255.255.252
+no shutdown
+exit
+do wr
+
+int gig0/1
+ip address 10.10.10.13 255.255.255.252
+no shutdown
+exit
+do wr
+
+int se0/2/0
+ip address 103.133.254.6 255.255.255.252
+no shutdown
+clock rate 64000
+exit
+do wr
+
+int se0/2/1
+ip address 103.133.254.14 255.255.255.252
+no shutdown
+clock rate 64000
+exit
+do wr
+
+
+OSPF Configuration ( OSPF 10 is the process ID )
+---------------------------------
+router ospf 10
+router-id 4.4.4.4
+network 10.10.10.8 0.0.0.3 area 0
+network 10.10.10.12 0.0.0.3 area 0
+network 103.133.254.4 0.0.0.3 area 0
+network 103.133.254.12 0.0.0.3 area 0
+
+do wr
+exit
+
+PAT Configuration
+-----------------
+ip nat inside source list 1 int se0/2/0 overload
+ip nat inside source list 1 int se0/2/1 overload
+
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+access-list 1 permit 192.168.30.0 0.0.0.255
+access-list 1 permit 192.168.40.0 0.0.0.255
+access-list 1 permit 192.168.50.0 0.0.0.255
+access-list 1 permit 192.168.60.0 0.0.0.255
+
+int range gig0/0-1
+ip nat inside
+exit
+
+int se0/2/0
+ip nat outside
+int se0/2/1
+ip nat outside
+exit
+
+do wr
+
+Defult static route
+-------------------
+ip route 0.0.0.0 0.0.0.0 se0/2/0   // If problem use: ip route 0.0.0.0 0.0.0.0 se0/2/0 70
+ip route 0.0.0.0 0.0.0.0 se0/2/1 70 
+
+do wr
+

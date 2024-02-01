@@ -1,0 +1,57 @@
+We are only configuring the interface of the ISP because we do not have the privilege to configure the ISP.
+
+
+==================================================
+			ISP-1
+==================================================
+Interface Configuration
+-----------------------
+int se0/3/0
+ip address 103.133.254.1 255.255.255.252
+no shutdown
+exit
+do wr
+
+int se0/3/1
+ip address 103.133.254.5 255.255.255.252
+no shutdown
+exit
+do wr
+
+OSPF Configuration ( OSPF 10 is the process ID )
+---------------------------------
+router ospf 10
+router-id 5.5.5.5
+network 103.133.254.0 0.0.0.3 area 0
+network 103.133.254.4 0.0.0.3 area 0
+
+do wr
+exit
+
+
+==================================================
+			ISP-2
+==================================================
+Interface Configuration
+-----------------------
+int se0/3/0
+ip address 103.133.254.9 255.255.255.252
+no shutdown
+exit
+do wr
+
+int se0/3/1
+ip address 103.133.254.13 255.255.255.252
+no shutdown
+exit
+do wr
+
+OSPF Configuration ( OSPF 10 is the process ID )
+---------------------------------
+router ospf 10
+router-id 6.6.6.6
+network 103.133.254.8 0.0.0.3 area 0
+network 103.133.254.12 0.0.0.3 area 0
+
+do wr
+exit

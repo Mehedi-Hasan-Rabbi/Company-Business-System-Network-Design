@@ -1,0 +1,11 @@
+show ip int brief
+show vlan brief
+show int trunk
+show ip route ospf
+show start
+show ip ospf neighbour
+show ip ospf database
+ssh -l admin 10.10.10.9
+show ip nat translation
+show ip route
+show port-security

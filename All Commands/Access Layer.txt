@@ -1,0 +1,311 @@
+========================================================================
+			Sales and Marketing
+=========================================================================
+Basic Setting
+-------------
+en
+config t
+
+hostname Sales-SW
+banner motd #No Unauthorised Acces!!!#
+no ip domain-lookup
+line console 0
+passw cisco
+login
+exit
+
+enable password cisco
+service password-encryption
+exit
+wr = write memory
+
+VLAN and Trunck port and Access port
+------------------------------------
+int range fa0/1-2
+switchport mode trunk
+exit
+
+vlan 10
+name Sales
+exit
+
+int range fa0/3-24
+switchport mode access
+switchport access vlan 10
+exit
+
+do wr
+
+/* Putting other giabitEthenet port to unused vlan with shutdown */
+vlan 99 
+name BlackHole
+exit
+
+int range gig0/1-2
+switchport mode access
+switchport access vlan 99
+shutdown
+exit
+
+do wr
+
+
+
+
+==========================================================================
+			HR and Logistic
+==========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname HR-SW
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+VLAN and Trunck port and Access port
+------------------------------------
+int range fa0/1-2
+switchport mode trunk
+exit
+
+vlan 20
+name HR
+vlan 99
+name BlackHole
+exit
+
+int range fa0/3-24
+switchport mode access
+switchport access vlan 20
+exit
+
+int range gig0/1-2
+switchport mode access
+switchport access vlan 99
+exit
+
+do wr
+
+
+==========================================================================
+			Finance and Accounts
+==========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname Finance-SW
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+VLAN and Trunck port and Access port
+------------------------------------
+int range fa0/1-2
+switchport mode trunk
+exit
+
+vlan 30
+name Finance
+vlan 99
+name BlackHole
+exit
+
+int range fa0/3-24
+switchport mode access
+switchport access vlan 30
+exit
+
+int range gig0/1-2
+switchport mode access
+switchport access vlan 99
+shutdown
+exit
+
+do wr
+
+
+Switchport security to finance department
+-----------------------------------------
+int range fa0/3-24
+Switchport port-security
+switchport port-security maximum 1         {// Means 1 user at a time}
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+
+do wr
+
+Excluding int fa0/6 from port-security
+-----------------------------------------
+int fa0/6
+no Switchport port-security
+no switchport port-security maximum 1
+no switchport port-security mac-address sticky
+no switchport port-security violation shutdown
+exit
+
+
+
+
+==========================================================================
+			Administrator and Public
+==========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname Admin-SW
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+
+VLAN and Trunck port and Access port
+------------------------------------
+int range fa0/1-2
+switchport mode trunk
+exit
+
+vlan 40
+name Admin
+vlan 99
+name BlackHole
+exit
+
+int range fa0/3-24
+switchport mode access
+switchport access vlan 40
+exit
+
+int range gig0/1-2
+switchport mode access
+switchport access vlan 99
+shutdown
+exit
+
+do wr
+
+
+==========================================================================
+				ICT
+==========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname ICT-SW
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+VLAN and Trunck port and Access port
+------------------------------------
+int range fa0/1-2
+switchport mode trunk
+exit
+
+vlan 50
+name ICT
+vlan 99
+name BlackHole
+exit
+
+int range fa0/3-24
+switchport mode access
+switchport access vlan 50
+exit
+
+int range gig0/1-2
+switchport mode access
+switchport access vlan 99
+shutdown
+exit
+
+do wr
+
+
+==========================================================================
+			Server Room
+==========================================================================
+Basic Setting
+-------------
+en
+config
+
+hostname ServerRoom-SW
+line console 0
+password cisco
+login
+exit
+
+enable password cisco
+no ip domain-lookup
+banner motd #No Unauthorised Acces!!!#
+service password-encryption
+
+do wr
+
+
+VLAN and Trunck port and Access port
+------------------------------------
+int range fa0/1-2
+switchport mode trunk
+exit
+
+vlan 60
+name ServerRoom
+vlan 99
+name BlackHole
+exit
+
+int range fa0/3-24
+switchport mode access
+switchport access vlan 60
+exit
+
+int range gig0/1-2
+switchport mode access
+switchport access vlan 99
+shutdown
+exit
+
+do wr
